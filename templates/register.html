@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}REGISTER PAGE{% endblock title %}
+{% block stylesheets %}
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+<!--===============================================================================================-->
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				<form class="login100-form validate-form" method="POST" id="id_form">
+				{% csrf_token %}
+					<span class="login100-form-title p-b-43">
+						REGISTER NEW USER
+					</span>
+					<div class="text-center p-b-20">
+					<span class"alert" style="color:red">NGANU</span>
+					</div>
+					<div class="wrap-input100">
+						<input class="input100" type="text" name="username" id="id_username">
+						<span class="focus-input100"></span>
+						<span class="label-input100">Username</span>
+					</div>
+					
+					
+					<div class="wrap-input100 validate-input" data-validate="Password is required">
+						<input class="input100" type="password" name="password1" id="id_password1">
+						<span class="focus-input100"></span>
+						<span class="label-input100">Password</span>
+					</div>
+
+                    <div class="wrap-input100 validate-input" data-validate="Password is required">
+						<input class="input100" type="password" name="password2" id="id_password2">
+						<span class="focus-input100"></span>
+						<span class="label-input100">Confirm</span>
+					</div>
+
+						<div>
+							<a href="/login" class="txt1">
+								Login
+							</a>
+						</div>
+					
+			
+
+					<div class="container-login100-form-btn">
+						<input class="login100-form-btn" type="submit" value="Register">
+							
+					</div>
+				</form>
+
+				
+			
+		</div>
+	</div>
+</div>
+{% endblock content %}
+
+{% block javascripts %}
+<!--===============================================================================================-->
+	<script src="{% static 'js/main.js' %}"></script>
+
+<script>
+$(document).ready(function(){
+	
+	$(document).on('submit','#id_form',function(e){
+		e.preventDefault();
+		$.ajax({
+			url:"{% url 'register-ajax' %}",
+			type:"POST",
+			data:{
+				username:$("#id_username").val(),
+				password1:$("#id_password1").val(),
+				password2:$("#id_password2").val(),
+				dataType:"json",
+				csrfmiddlewaretoken:$("input[name=csrfmiddlewaretoken]").val(),
+			},
+			
+			success:function(data){
+				$("span.text-center").html(data.msg)
+				window.location.href = "{% url 'login-view' %}"	
+			},
+			error:function(err){
+				alert(err)
+			}
+		});
+	});
+	
+})
+</script>
+{% endblock javascripts %}
